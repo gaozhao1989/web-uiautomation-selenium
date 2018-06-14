@@ -11,19 +11,25 @@
 
 import os
 
-from utils import pathFactory, loggingFactory
+from utils import pathparserfactory, loggingfactory, configparserfactory
 
-log = loggingFactory.Log().getLog('Utils')
-tests_path = pathFactory.path_join(pathFactory.get_workspace_root_path(), 'tests')
-report_path = pathFactory.path_join(pathFactory.get_workspace_root_path(), 'report')
+log = loggingfactory.Log().getlog('Utils')
+ppf = pathparserfactory.PathParser()
+cpf = configparserfactory.ConfigParser()
+tests_path = ppf.path_join(ppf.get_workspace_root_path(), 'tests')
+report_path = ppf.path_join(ppf.get_workspace_root_path(), 'report')
+screenshot_path = ppf.path_join(ppf.get_workspace_root_path(), 'screenshots')
+test_scope = cpf.get_test_scope()
 
 
 class Runner(object):
+
     def __init__(self, *args):
-        if args[0] == '' or args[0] == 'tests':
-            self.test_scope = 'tests'
+        if args[0] == '' or args[0] == test_scope:
+            self.test_scope = test_scope
         else:
             self.test_scope = args[0]
+        ppf.remove_dirs(report_path, screenshot_path)
 
     def run_test(self):
         self.generate_results()
@@ -34,7 +40,7 @@ class Runner(object):
         pytest.main([pytest_scope, '--alluredir=' + results_dir])
 
     def generate_html_report(self, results_dir=report_path,
-                             html_report_dir=pathFactory.path_join(report_path, 'html')):
+                             html_report_dir=ppf.path_join(report_path, 'html')):
         cmd = 'allure generate ' + results_dir + ' -o ' + html_report_dir
         log.debug(cmd)
         os.system(cmd)
