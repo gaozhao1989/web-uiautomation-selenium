@@ -10,44 +10,39 @@
 '''
 
 import os
-
-from utils import pathparserfactory, loggingfactory, configparserfactory
-
-log = loggingfactory.Log().getlog('Utils')
-ppf = pathparserfactory.PathParser()
-cpf = configparserfactory.ConfigParser()
-tests_path = ppf.path_join(ppf.get_workspace_root_path(), 'tests')
-report_path = ppf.path_join(ppf.get_workspace_root_path(), 'report')
-screenshot_path = ppf.path_join(ppf.get_workspace_root_path(), 'screenshots')
-test_scope = cpf.get_test_scope()
+import pytest
+from utils import path_parser, config_parser
 
 
 class Runner(object):
 
-    def __init__(self, *args):
-        if args[0] == '' or args[0] == test_scope:
-            self.test_scope = test_scope
-        else:
-            self.test_scope = args[0]
-        ppf.remove_dirs(report_path, screenshot_path)
+    def __init__(self):
+        self.pp = path_parser.PathParser()
+        self.cp = config_parser.ConfigParser()
+        self.tests_dir = self.pp.get_tests_path()
+        self.report_dir = self.pp.get_report_path()
+        self.html_report_dir = self.pp.get_html_report_path()
+        self.screenshots_dir = self.pp.get_screen_shots_path()
+        self.rerun_failures = self.cp.get_rerun_failures()
+        self.rerun_delay = self.cp.get_rerun_delay()
+        self.pp.remove_dirs(self.report_dir, self.screenshots_dir)
 
     def run_test(self):
         self.generate_results()
         self.generate_html_report()
 
-    def generate_results(self, pytest_scope=tests_path, results_dir=report_path):
-        import pytest
-        pytest.main([pytest_scope, '--alluredir=' + results_dir])
+    def generate_results(self):
+        pytest.main([self.tests_dir, '--reruns', self.rerun_failures, '--reruns-delay', self.rerun_delay,
+                     '--alluredir={}'.format(self.report_dir)])
 
-    def generate_html_report(self, results_dir=report_path,
-                             html_report_dir=ppf.path_join(report_path, 'html')):
-        cmd = 'allure generate ' + results_dir + ' -o ' + html_report_dir
-        log.debug(cmd)
+    def generate_html_report(self):
+        cmd = 'allure generate {} -o {}'.format(self.report_dir, self.html_report_dir)
+        print(cmd)
         os.system(cmd)
 
 
 def runner():
-    run = Runner('tests')
+    run = Runner()
     run.run_test()
 
 

@@ -1,0 +1,5 @@
+selenium==3.141.0
+pytest==4.1.0
+allure-pytest==2.5.4
+requests==2.21.0
+pytest-rerunfailures==5.0
