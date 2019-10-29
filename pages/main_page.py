@@ -24,3 +24,6 @@ class MainPage(base_page.BasePage):
 
     def set_text_nav_search_text_box(self, text=''):
         self.send_keys(MainPageLocators.TEXT_NAV_SEARCH_TEXT_BOX, text)
+
+    def wait_page_present(self):
+        self.wait(MainPageLocators.SUBMIT_NAV_SEARCH_TEXT_BTN)

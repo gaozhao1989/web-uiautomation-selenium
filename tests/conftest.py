@@ -21,6 +21,6 @@ def get_book_st_second_ver_price():
     return re.search('\d+.\d+', json.loads(res.content)['buyingPrice']).group()
 
 
-@pytest.fixture(params=['20.40', get_book_st_second_ver_price()])
+@pytest.fixture(params=[ '20.70'])
 def order_price_fixture(request):
     return request.param

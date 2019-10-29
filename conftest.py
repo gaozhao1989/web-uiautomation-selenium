@@ -5,7 +5,7 @@
 @license: (C) Copyright 2013-2018.
 @contact: gaozhao89@qq.com
 @software: web-uiautomation-selenium
-@file: driverGenerator
+@file: conftest
 @time: 06/06/2018 1:39 PM
 '''
 
@@ -50,6 +50,12 @@ def driver(request):
     elif type(scope) == pytest.Function:
         cls = scope.getparent(pytest.Class)
         setattr(cls.obj, 'driver', driver)
+
+    try:
+        log.info('maximize window ')
+        driver.maximize_window()
+    except Exception as e:
+        log.error('maximize window fail {}'.format(str(e)))
 
     try:
         log.info('open url: {}'.format(url))

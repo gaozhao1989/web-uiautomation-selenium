@@ -1,0 +1,6 @@
+BROWSER_NAME='Chrome'
+URL='https://www.amazon.cn/'
+DATE_FORMAT='%Y%m%d%H%M%S'
+IMPLICITLY_WAIT=15
+RERUN_FAILURES=1
+RERUN_DELAY=1

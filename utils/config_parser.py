@@ -5,7 +5,7 @@
 @license: (C) Copyright 2013-2018.
 @contact: gaozhao89@qq.com
 @software: web-uiautomation-selenium
-@file: configParserFactory
+@file: config_parser
 @time: 06/06/2018 1:41 PM
 '''
 

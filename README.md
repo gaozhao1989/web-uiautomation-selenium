@@ -84,7 +84,7 @@ base_page负责实现页面通用方法<br>
 ###### runner.py
 批量执行测试入口文件（将会自动调用重跑机制，测试完成后将会自动生成网页版测试报告「该测试报告由[Allure](http://allure.qatools.ru)提供支持」）
 ###### setup.py
-打包文件以及相关描述「一般不进行此操作」
+打包文件以及相关描述「一般不进行此操作，不加入版本控制」
 
 ------
 
@@ -113,6 +113,6 @@ brew install allure
 ------
 
 ## 查看测试结果
-<span style="color:red">注意：直接打开*index.html*在某些浏览器中将显示结果为*404 not found*</span><br>
+注意：直接打开*index.html*在某些浏览器中将显示结果为*404 not found*<br>
 使用命令行工具：allure serve [path_of_report]<br>
 可以直接启动allure服务并查看测试结果

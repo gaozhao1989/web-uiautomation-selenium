@@ -9,8 +9,9 @@
 @time: 06/06/2018 11:24 AM
 '''
 from utils.log import Log
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from utils import path_parser
 
 import datetime
@@ -115,8 +116,11 @@ class BasePage(object):
         except NoSuchElementException:
             self.log.info('no elements by \'{}\' with \'{}\' was found in page'.format(*loc))
 
-    def wait(self, loc, sec):
-        WebDriverWait(self.driver, sec).until(lambda driver: self.find(loc))
+    def wait(self, loc, sec=15):
+        try:
+            WebDriverWait(self.driver, sec).until(EC.presence_of_element_located(loc))
+        except WebDriverException:
+            self.log.info('wait element present by \'{}\' with \'{}\' in {} failed'.format(*loc, sec))
 
     def take_screen_shot(self, name):
         date_format = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
@@ -141,7 +145,7 @@ class BasePage(object):
         el.send_keys(text)
 
     def get_text(self, loc):
-        return self.find(loc).text
+        return self.find(loc).text.strip()
 
     @staticmethod
     def sleep(sec=3):
@@ -158,3 +162,6 @@ class BasePage(object):
 
     def get_window_handles(self):
         return self.driver.window_handles
+
+    def switch_to_frame(self, frame):
+        self.driver.switch_to.frame(frame)

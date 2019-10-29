@@ -26,3 +26,6 @@ class SearchResultsPage(base_page.BasePage):
             if handle != search_results_handle:
                 self.switch_to_window(handle)
         return goods_detail_page.GoodsDetailPage(self.driver)
+    
+    def wait_page_persent(self):
+        self.wait(SearchResultPageLocators.UL_SEARCH_RESULTS_LIST)
